@@ -1,4 +1,4 @@
 COP3503GroupProject
 ===================
 
-Final project for Programming Fundamentals in Cpooppoop
+Final project for Programming Fundamentals in C++
