@@ -1,0 +1,48 @@
+#include <iostream>
+#include <fstream>
+
+class Account
+	-string accountName;
+	-float accountBalance;
+	-string accountType;
+	-float accountCreationDate;
+
+	//constructor
+	+void Account(string name, float balance, string type){}
+
+	//getters and setters
+	+void setAccountName(string name) {}
+	+string getAccountName() {}
+
+	+void setAccountBalance(float balance) {}
+	+float getAccountBalance() {}
+
+	//no setter as you cannot change from checking to savings
+	+string getAccountType() {}
+
+class User
+	-string username;
+	-string password;
+	-string hashedPassword;
+	-ofstream userInfo;
+
+	//constructor
+	+User(string name, string pw) {}
+
+	//create username and password
+	+void setUsername(string name) {}
+	+string getUsername() {}
+
+	void setPassword(string pw) {}
+	+string getPassword() {}
+
+	//password encryption
+	+string generateSalt() {}
+	+void hashPassword() {}
+	+string getHashedPassword() {}
+
+	//export username and password info
+	+void userInfoExport() {}
+
+	//import username and password info
+	+void userInfoImport() {}
