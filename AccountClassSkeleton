@@ -1,0 +1,22 @@
+#include <iostream>
+#include <fstream>
+
+class Account
+	-string accountName;
+	-float accountBalance;
+	-string accountType;
+	-float accountCreationDate;
+
+	//constructor
+	+void Account(string name, float balance, string type){}
+
+	//getters and setters
+	+void setAccountName(string name) {}
+	+string getAccountName() {}
+
+	+void setAccountBalance(float balance) {}
+	+float getAccountBalance() {}
+
+	//no setter as you cannot change from checking to savings
+	+string getAccountType() {}
+	
