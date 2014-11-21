@@ -1,0 +1,31 @@
+// user creation method
+#include <iostream>
+#include <string>
+#include "UserClass.h"
+
+using namespace std;
+
+int main()
+{
+	string name;
+	string user;
+	string pw;
+
+	cout << "Please enter your name: ";
+	cin >> name;
+
+	// check for length of password, and for duplicate usernames
+	cout << "Please enter a Username: ";
+	cin >> user;
+
+	cout << "Please enter a Password: ";
+	cin >> pw;
+	cout << endl;
+
+	User* currentUser = new User(name, user, pw);
+
+	cout << "User Info: " << endl;
+	cout << "Username: " << currentUser->getUsername() << endl;
+	cout << "Password: " << currentUser->getHashedPassword() << endl;
+	cout << "------------------------------------------------" << endl;
+}
