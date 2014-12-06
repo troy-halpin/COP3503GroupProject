@@ -6,14 +6,14 @@ using namespace std;
 
 class interestSimulator
 {
-	unsigned int numYears;
+	double 		 numYears;
 	double  	 currentBalance;
 	double 		 interestRate;
 	double  	 futureBalance;
 	double 		 cmpd_rate;
 
 	public:
-		interestSimulator(double currentBalance, double interestRate, unsigned int numYears)	// constructor
+		interestSimulator(double currentBalance, double interestRate, double numYears)	// constructor
 		{
 			this->currentBalance = currentBalance;
 			this->interestRate = interestRate;
@@ -22,10 +22,10 @@ class interestSimulator
 			cout << "\nYou have opened the Interest Simulator. This program will estimate your future balance after compounding interest." << endl;
 		}
 
-		int periodic_cmpd(unsigned int n)											// take in number of compounds per year
+		int periodic_cmpd(double n)													// take in number of compounds per year
 		{																			// to calculate compound rate, then
 			cmpd_rate = interestRate / n;			
-			futureBalance = currentBalance * (pow((1 + cmpd_rate), (numYears * n))); 	// calculate future balance with
+			futureBalance = currentBalance * (pow((1.0 + cmpd_rate), (numYears * n))); 	// calculate future balance with
 			return futureBalance;														// periodic compounding
 		}
 
