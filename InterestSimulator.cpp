@@ -1,4 +1,4 @@
-#include "interestSimulator.h"
+#include "InterestSimulator.h"
 #include "Account.h"
 #include <string>
 #include <iostream>
@@ -9,7 +9,7 @@ interestSimulator* createSimulator(Account* a)			// function that gets inputs fr
 {								// an instance of the simulator object
 	double 		 currentBalance = a->getAccountBalance();		// get current balance for that account 
 	double 		 interestRate =	  0.0;
-	unsigned int numYears = 	  0;
+	double 		 numYears = 	  0.0;
 	
 	interestSimulator* i = new interestSimulator(currentBalance, interestRate, numYears); 	// create simulator object
 
