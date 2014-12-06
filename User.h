@@ -9,6 +9,8 @@
 
 *********************************************************************
 */
+#ifndef _USER_H
+#define _USER_H
 
 #include <string>
 #include <stdio.h>      /* printf, scanf, puts, NULL */
@@ -26,11 +28,11 @@ class User
 {
 private:
 
-	const string userName;
-	const string hashedPassword;
-	const string userSalt;
-	const string realName;
-	const FileManage manager;
+	string userName;
+	string hashedPassword;
+	string userSalt;
+	string realName;
+	FileManage manager;
 	string saltedAP;				// attepmted password + salt
 	Account* userAccounts[3];
 	int numberOfAccounts;
@@ -56,7 +58,7 @@ public:
 		string realSaltedPass = realPass += userSalt;
 		hashedPassword = hashPassword(realSaltedPass);
 		saltedAP = attemptedPass += userSalt;
-		numberOfAccounts = 3 - manager.freeAccounts();
+		numberOfAccounts = 3 - manager.freeAccounts(userName);
 	}
 
 	string getUsername()
@@ -170,7 +172,7 @@ public:
 			bal3 = to_string(userAccounts[2]->getAccountBalance());	// change to string
 		}
 
-		manager.writeFile(userName, hashedPassword, string realName, userSalt, accName1, bal1, accName2, bal2, accName3, bal3);
+		manager.writeFile(userName, hashedPassword, realName, userSalt, accName1, bal1, accName2, bal2, accName3, bal3);
 	}
 
 	/************************************************************
@@ -186,19 +188,19 @@ public:
 
 	void takeAccountsOnline(string accName1, string accName2, string accName3, string bal1, string bal2, string bal3)
 	{
-		double amount = stod(bal1);
+		//double amount = stod(bal1);
 
-		userAccounts[0] = new Account(accName1, bal1Double);
+		userAccounts[0] = new Account(accName1, 0);
 
 		if (numberOfAccounts >= 2)
 		{
-			amount = stod(bal2);
-			userAccounts[1] = new Account(accName2, bal2);
+			//amount = stod(bal2);
+			userAccounts[1] = new Account(accName2, 0);
 		}
 		if (numberOfAccounts == 3)
 		{
-			amount = stod(bal3);
-			userAccounts[2] = new Account(accName3, bal3);
+			//amount = stod(bal3);
+			userAccounts[2] = new Account(accName3, 0);
 		}
 	}
 
@@ -325,3 +327,4 @@ public:
 		return numToString.str() ;
 	}
 };
+#endif
