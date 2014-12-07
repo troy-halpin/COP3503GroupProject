@@ -156,8 +156,7 @@ void mainMenu(User* user) {
 	   				 having another account, which the account class is not equipped for. So the transfer function was placed here instead                */
 	   			
 	   			
-	   			cout << "Welcome to our money transfer service. Currently, funds can only be moved between your accounts, not other user's.\n"
-	   			"How much would you like to transfer? Please note that all transfers must be of values greater than or equal to $1" << endl;
+	   			cout << "How much would you like to transfer? Please note that all transfers must be of values greater than or equal to $1" << endl;
 	   			
 	   			int amount = inputCzech();	
 	   				   			
@@ -172,7 +171,7 @@ void mainMenu(User* user) {
 	   			
 	   			if (user->getNumberOfAccounts() == 1) {
 	   			
-	   				cout << "You don't have another account to switch to! Adding another is simple and free, just select Option 5 at the main menu." << endl;
+	   				cout << "Error: You don't have another account to switch to! Adding another is simple and free, just select Option 5 at the main menu." << endl;
 	   				break;
 	   			} 
 	   			
@@ -264,37 +263,52 @@ void mainMenu(User* user) {
 }
 
 int main(void){
-
-	int x = 0;
-	cout<<"Welcome to the Personal Banking Software!"<<endl;
-	cout<<endl;
-	cout<<"Enter a Command: \n 1: Sign In \n 2: Sign Up \n 3: Exit Program" << endl;
-	x = inputCzech();
-	User* user;
-
+	bool firstLaunch = true;
 	while (true) {
-		if (x == 1){
+		int x = 0;
+		if (firstLaunch) {
+			cout<<"Welcome to the Personal Banking Software!"<<endl;
+			firstLaunch = false;
+		}
+		cout<<endl;
+		cout<<"Enter a Command: \n 1: Sign In \n 2: Sign Up \n 3: Exit Program" << endl;
+		x = inputCzech();
+		User* user;
+		FileManage manager;
+
+		if (x == 1) {
+			//cout << "is this file empty? " << manager.emptyFileCheck() << endl;
+
 			
 			while (true) {
 
-				string username;
-				string password;
-				cout<<"Enter your username."<<endl;
-				getline(cin, username);
-				cout<<"Enter your password."<<endl;
-				getline(cin, password);
-				try {										// try should go back to choice of the user
-					user = czechUser(username, password); //checkUser
+				if (manager.emptyFileCheck()) {
+					cout << "Please sign Up first" << endl;
 					break;
-				} catch (exception &e) {
-					cerr << e.what() << endl;
-				}
-			}
 
-			cout << "Welcome " << user->getRealName() << "!\n" << endl;
-			
-			mainMenu(user);
-			x = 3;
+				} else {
+
+					string username;
+					string password;
+					cout<<"Enter your username."<<endl;
+					getline(cin, username);
+					cout<<"Enter your password."<<endl;
+					getline(cin, password);
+					cout << "Or enter 'back' to go back" << endl;
+
+					try {									  // try should go back to choice of the user
+						user = czechUser(username, password); //checkUser
+						break;
+					} catch (exception &e) {
+						cerr << e.what() << endl;
+					}
+				}
+
+				cout << "Welcome " << user->getRealName() << "!\n" << endl;
+		
+				mainMenu(user);
+				x = 3;
+			}
 		}
 		else if (x == 2) {
 
