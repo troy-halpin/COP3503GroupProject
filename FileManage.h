@@ -1,3 +1,5 @@
+#ifndef _FILE_MANAGE_H
+#define _FILE_MANAGE_H
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -36,7 +38,7 @@ public:
 		myFile.close();
 	}
 
-	void readFile(string username, string& password, string& realName, string& saltPW, string& accName1, string& bal1, string& accName2, string& bal2, string& accName3, string& bal3) {
+	void readFile(string username, string &password, string &realName, string &saltPW, string &accName1, string &bal1, string &accName2, string &bal2, string &accName3, string &bal3) {
 		ifstream myFile;
 		string buffer;
 		string existingUser;
@@ -146,9 +148,12 @@ public:
 			}
 		}
 		
-		cout << "You have " << count/2 << " account(s) free." << endl;
+		//cout << "You have " << count/2 << " account(s) free." << endl;
+		count /= 2;
 
 		myFile.close();
+
+		return count;
 	}
 
 	void changeInformation(string username, string& password, string& realName, string& saltPW, string& accName1, string& bal1, string& accName2, string& bal2, string& accName3, string& bal3) {
@@ -225,3 +230,4 @@ public:
 		myFile.close();
 	}
 };
+# endif
