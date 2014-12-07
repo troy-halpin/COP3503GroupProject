@@ -54,9 +54,8 @@ public:
 	{
 		realName = realNameInput;
 		userName = userNameInput;
+		hashedPassword = realPass;
 		userSalt = salt;
-		string realSaltedPass = realPass += userSalt;
-		hashedPassword = hashPassword(realSaltedPass);
 		saltedAP = attemptedPass += userSalt;
 		numberOfAccounts = 3 - manager.freeAccounts(userName);
 	}
@@ -210,6 +209,7 @@ public:
 		{
 			Account* currentAccount = new Account(accountName, 0.0);
 			userAccounts[numberOfAccounts] = currentAccount;
+			numberOfAccounts++;
 		}
 		else
 		{
@@ -249,12 +249,13 @@ public:
 
 		if (numberOfAccounts == 2)
 		{
-			for (int i = 0; i < 3; i++)
+			if (userAccounts[0]->getAccountName() == currentAccount)
 			{
-				if (userAccounts[i]->getAccountName() != currentAccount && userAccounts[i]->getAccountName() != "*")
-				{
-					newAccountIndex = i;
-				}
+				newAccountIndex = 1;
+			}
+			else
+			{
+				newAccountIndex = 0;
 			}
 		}
 		else	// number of accounts = 3
@@ -276,6 +277,7 @@ public:
 				}
 			}
 
+			cout << "Which account would you like to switch to?" <<endl;
 			string choice;
 			cout << "1 - " << otherAccount << endl << "2 - " << otherAccount2 << endl;
 			cin >> choice;
