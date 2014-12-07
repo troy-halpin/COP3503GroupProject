@@ -14,10 +14,13 @@ bool userLogOut = false;
 int inputCzech() {
 	int input;
 	cin >> input;
+	cin.clear();
+	cin.ignore(10000, '\n');  
+
     while ((cin.fail()) || (input < 1)) {
 	    cin.clear();               
 	    cin.ignore(10000, '\n');   
-	    cout << "Sorry, your input was not valid, please try again" << endl;
+	    cout << "Sorry, your input was not valid, please try again." << endl;
 	    cin >> input;
 	}
 
@@ -55,6 +58,8 @@ User* czechUser(string realName, string userName, string password, string accoun
 		// create default bank account
 		currentUser->createNewAccount(accountName);
 
+		currentUser->infoExport();
+
 		return currentUser;
 	}
 	else // another user has already claimed the username
@@ -75,7 +80,7 @@ User* czechUser(string userNameInput, string passwordInput) // existing user
 	if (userExists)
 	{
 		// read in real password, real name, and user salt
-		manager.readFile(userNameInput, &realPassword, &realName, &userSalt, &accName1, &bal1, &accName2, &bal2, &accName3, &bal3);
+		manager.readFile(userNameInput, realPassword, realName, userSalt, accName1, bal1, accName2, bal2, accName3, bal3);
 
 		User* currentUser = new User(realName, userNameInput, realPassword, userSalt, passwordInput);
 
@@ -122,67 +127,76 @@ void mainMenu(User* user) {
 			//At the end of most operations (ones that actually alter an account) the "user->infoExport()" function is called. This overwrites and saves the program.
 
 	  		case 1:
+	    	{
 	    		//check balance
-	  			cout << "The balance in " << currAccount->getAccountName() << " is: " << currAccount->getAccountBalance() << endl;
+	    		cout << "The balance in " << currAccount->getAccountName() << " is: " << currAccount->getAccountBalance() << endl;
+	    		cout << "The number of accounts is " << user->getNumberOfAccounts() << endl;
 	    		break;
+	    	}
 
 	  		case 2:
+	   		{
 	   			//deposit
-	  			depositFunds(currAccount);
-	  			//user->infoExport();
-	   		 	break;
+	   			depositFunds(currAccount);
+	   			//user->infoExport();
+	   			break;
+	   		}
 
 	   		case 3:
+	   		{
 	   			//withdraw
 	   			withdrawFunds(currAccount);
 	   			//user->infoExport();
-	   			break;
+	   			break;}
 
 	   		case 4:
+	   		{
 	   			//transfer
 	   			/*  Special note-- This was originally a function in the account class, but we realized that having to transfer to another account involves
-   			        having another account, which the account class is not equipped for. So the transfer function was placed here instead                */
-
-
+	   				 having another account, which the account class is not equipped for. So the transfer function was placed here instead                */
+	   			
+	   			
 	   			cout << "Welcome to our money transfer service. Currently, funds can only be moved between your accounts, not other user's.\n"
 	   			"How much would you like to transfer? Please note that all transfers must be of values greater than or equal to $1" << endl;
-
-	   			int amount = inputCzech();	
 	   			
-
+	   			int amount = inputCzech();	
+	   				   			
+	   			
 	   			cout << "\nExcellent, we will begin the transferring process now." << endl;
-
+	   			
 	   			if (amount > currAccount->getAccountBalance()) {
-
-					cout << "Our apologies, there are insufficient funds in this account to complete this transfer" << endl;
-					break;
-				}
-
-				if (user->getNumberOfAccounts() == 1) {
-
-					cout << "You don't have another account to switch to! Adding another is simple and free, just select Option 5 at the main menu." << endl;
-					break;
-				} 
-
-				if (user->getNumberOfAccounts() == 3) {
-
-	   				cout << "Which account would you like to transfer funds to?" << endl;
+	   			
+	   				cout << "Our apologies, there are insufficient funds in this account to complete this transfer" << endl;
+	   				break;
 	   			}
-	   			//subtracting the transfer amount from current account's balance
-	   			currAccount->setAccountBalance(currAccount->getAccountBalance() - amount);
-
-				Account* temp = user->grabAccount(currAccount->getAccountName());
-				temp->setAccountBalance(temp->getAccountBalance() + amount);
-
-				cout << "Successfully transferred: " << amount << " USD from " << currAccount->getAccountName() << " to " << temp->getAccountName() << endl;
-				cout << currAccount->getAccountName() << ": " << currAccount->getAccountBalance() << endl;
-				cout << temp->getAccountName() << ": " << temp->getAccountBalance() << endl;
-				
-
-				//user->infoExport();
-	   			break;
+	   			
+	   			if (user->getNumberOfAccounts() == 1) {
+	   			
+	   				cout << "You don't have another account to switch to! Adding another is simple and free, just select Option 5 at the main menu." << endl;
+	   				break;
+	   			} 
+	   			
+	   			if (user->getNumberOfAccounts() == 3) {
+	   			
+	   			   cout << "Which account would you like to transfer funds to?" << endl;
+	   			}
+	   				//subtracting the transfer amount from current account's balance
+	   				currAccount->setAccountBalance(currAccount->getAccountBalance() - amount);
+	   			
+	   				Account* temp = user->grabAccount(currAccount->getAccountName());
+	   				temp->setAccountBalance(temp->getAccountBalance() + amount);
+	   			
+	   				cout << "Successfully transferred: " << amount << " USD from " << currAccount->getAccountName() << " to " << temp->getAccountName() << endl;
+	   				cout << currAccount->getAccountName() << ": " << currAccount->getAccountBalance() << endl;
+	   				cout << temp->getAccountName() << ": " << temp->getAccountBalance() << endl;
+	   							
+	   			
+	   				//user->infoExport();
+	   				break;
+	   		}
 
 	   		case 5:
+	   		{
 	   			//add new account
 	   			string name;
 	   			cout << "Thank you for opening a new account with us. What would you like to name it?" << endl;
@@ -191,49 +205,60 @@ void mainMenu(User* user) {
 	   				user->createNewAccount(name);
 	   				cout << "Account creation complete. You can access your new account by selecting Option 6 at the main menu, and selecting your new account." << endl;
 	   			} catch (exception& e) {
-	   				cerr << e.what() << endl;
+	   				 cerr << e.what() << endl;
 	   			}
 	   			//user->infoExport();
 	   			break;
+	   		}
 
 	   		case 6:
+	   		{
 	   			//switch accounts
 	   			cout << "What accound would you like to switch to?" << endl;
 	   			//List of accounts function
 	   			int numAccts = user->getNumberOfAccounts();
-
+	   			
 	   			if (numAccts == 1) {
-
+	   			
 	   				cout << "You don't have another account to switch to! Adding another is simple and free, just select Option 5 at the main menu." << endl;
-
+	   			
 	   			} else if (numAccts == 2) {
-
+	   			
 	   				//tells the user class what account we are currently
-	   				currAccount = user->grabAccount(currAccount->getAccountName());
+	   				string currAccountName = currAccount->getAccountName();
+	   				currAccount = user->grabAccount(currAccountName);
 	   				cout << "Operation complete, you are now accessing " << currAccount->getAccountName() << endl;
 	   			} else {
 	   				currAccount = user->grabAccount(currAccount->getAccountName());
-				}
-				//user->infoExport();
+	   			}
+	   			//user->infoExport();
 	   			break;
+	   		}
 
 	   		case 7:
+	   		{
 	   			//run interest simulator
-	   			interestSimulator* i = createSimulator(currAccount);	// started getting serious problems when I was fixing this		
-		 		runSimulator(i);
-				//delete i;
+	   			interestSimulator* i = createSimulator(currAccount);		
+	   			runSimulator(i);
+	   			delete i;
+	   			//cout << "InterestSimulator" << endl;
 
 	   			break;
+	   		}
 	   		case 8:
-	   			//logout
-	   			cout << user->getRealName() << ", thank you for using the PBS. Have a great day!" << endl;
-	   			//user->infoExport();
-	   			userLogOut = true;
-	   			break;
+	   			{
+	   				//logout
+	   				cout << user->getRealName() << ", thank you for using the PBS. Have a great day!" << endl;
+	   				//user->infoExport();
+	   				userLogOut = true;
+	   				break;
+	   			}
 	   			
 	  		default:
+	   		{
 	   			cout << "Command unknown";
 	   			break;
+	   		}
 	    }
 	}
 }
@@ -258,7 +283,7 @@ int main(void){
 				getline(cin, username);
 				cout<<"Enter your password."<<endl;
 				getline(cin, password);
-				try {
+				try {										// try should go back to choice of the user
 					user = czechUser(username, password); //checkUser
 					break;
 				} catch (exception &e) {
@@ -269,6 +294,7 @@ int main(void){
 			cout << "Welcome " << user->getRealName() << "!\n" << endl;
 			
 			mainMenu(user);
+			x = 3;
 		}
 		else if (x == 2) {
 
@@ -301,6 +327,7 @@ int main(void){
 				}
 			}
 			mainMenu(user);
+			x = 3;
 		}
 		
 		else if (x == 3) {
