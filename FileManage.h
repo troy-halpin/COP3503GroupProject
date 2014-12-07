@@ -223,6 +223,23 @@ public:
 		return count;
 		myFile.close();
 	}
+	
+	bool emptyFileCheck() {
+		int length;
+		ifstream myFile;
+
+		myFile.open("accInfo.txt");
+		myFile.seekg(0, ios::end); 
+		length = myFile.tellg(); 
+		myFile.close();
+
+		if ( length == 0 ){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 	void clearFile() {
 		ofstream myFile;
