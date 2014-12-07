@@ -34,7 +34,7 @@ interestSimulator* createSimulator(Account* a)			// function that gets inputs fr
 	{
 		cin.clear();
 		cin.ignore(1000, '\n');
-		cout << "\nThe time interval must be a positive number." << endl;
+		cout << "\nThe time interval must be a positive integer." << endl;
 		cout << "Enter a time interval: ";
 		cin >> numYears;
 	}
