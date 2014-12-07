@@ -207,17 +207,17 @@ double convert_From(unsigned int currencyChoice, currencyConverter* cc)	// funct
 	return deposited_Amt;
 }
 
-void changeWithdrawCurrency(Account* a)			// function that combines all other functions to physically withdraw
-{												//  the amount given by the user and (possibly) show amount in another currency
+void withdraw(Account* a)			// function that combines all other functions to physically withdraw
+{								//  the amount given by the user and (possibly) show amount in another currency
 	double amt = 0.0;												
 	cout << "\nEnter amount to withdraw (in USD): ";							
 	cin >> amt;														// get withdraw amount from user
 
-	while (cin.fail() || amt < 0.0) // *** or more than 2 decimal places ***		
+	while (cin.fail() || (amt < 0.0) || (fmod((amt * 1000.0), 10.0) != 0)) // if amt is negative or more than 2 decimal places,		
 	{																		
 		cin.clear();														
 		cin.ignore(1000, '\n');											// catch bad input
-		cout << "\nPlease enter a positive amount: ";							
+		cout << "\nPlease enter a positive amount with up to 2 decimal places: ";							
 		cin >> amt;															
 	}								
 
@@ -248,8 +248,8 @@ void changeWithdrawCurrency(Account* a)			// function that combines all other fu
 	}
 }
 
-void changeDepositCurrency(Account* a)		// function that combines all other functions to physically deposit
-{											// amount from user into account and convert to USD if necessary
+void deposit(Account* a)		// function that combines all other functions to physically deposit
+{									// amount from user into account and convert to USD if necessary
 	double amt = 0.0;
 	cout << "\nAre you depositing in another currency (not USD)? Y/N" << endl;	// ask user if using different currency
 	string choice = "";
@@ -270,11 +270,11 @@ void changeDepositCurrency(Account* a)		// function that combines all other func
 		cout << "\nEnter amount to deposit: ";					// get deposit amount from user in that currency
 		cin >> amt;																	
 
-		while (cin.fail() || amt < 0.0) // *** or more than 2 decimal places ***		
+		while (cin.fail() || (amt < 0.0) || (fmod((amt * 1000.0), 10.0) != 0)) // if amt is negative or more than 2 decimal places,	
 		{																			
 			cin.clear();														
 			cin.ignore(1000, '\n');												// catch bad input
-			cout << "\nPlease enter a positive amount: ";							
+			cout << "\nPlease enter a positive amount with up to 2 decimal places: ";							
 			cin >> amt;															
 		}																
 
@@ -289,15 +289,15 @@ void changeDepositCurrency(Account* a)		// function that combines all other func
 		cout << "\nEnter amount to deposit: ";					// get deposit amount from user		
 		cin >> amt;																	
 
-		while (cin.fail() || amt < 0.0) // *** or more than 2 decimal places ***			
+		while (cin.fail() || (amt < 0.0) || (fmod((amt * 1000.0), 10.0) != 0)) // if amt is negative or more than 2 decimal places,			
 		{
 			cin.clear();														
 			cin.ignore(1000, '\n');								// catch bad input
-			cout << "\nPlease enter a positive amount: ";					
+			cout << "\nPlease enter a positive amount with up to 2 decimal places: ";					
 			cin >> amt;														
 		}
 
-		a->deposit(amt);										// deposit amount (in USD) into account
+		a->deposit(amt);								// deposit amount (in USD) into account
 	}
 }
 
@@ -311,12 +311,13 @@ int main()				// just for testing purposes
 	Account* a = new Account(name, bal, type);
 
 	//withdrawing
-	changeWithdrawCurrency(a);
+	withdraw(a);
 
 	//depositing
-	changeDepositCurrency(a);
+	deposit(a);
 	
 	// ***** return to main menu *****
 
 	return 0;
 }
+
