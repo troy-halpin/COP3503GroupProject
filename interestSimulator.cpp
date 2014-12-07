@@ -78,7 +78,7 @@ int runSimulator(interestSimulator* i)				// function that calls other functions
 						{																// catch bad input
 							cin.clear();
 							cin.ignore(1000, '\n');
-							cout << "\nThe number of compounds per year must be a positive number." << endl;
+							cout << "\nThe number of compounds per year must be a positive integer." << endl;
 							cout << "Enter the number of compounds per year: ";
 							cin >> n;
 						}
