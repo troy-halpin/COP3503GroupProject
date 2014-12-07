@@ -1,3 +1,5 @@
+#ifndef _ACCOUNT_H
+#define _ACCOUNT_H
 #include <iostream>
 #include <string.h>
 
@@ -49,3 +51,4 @@ public:
 
 	}
 };
+# endif
