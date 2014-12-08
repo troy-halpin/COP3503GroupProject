@@ -38,7 +38,7 @@ public:
 		myFile.close();
 	}
 
-	void readFile(string username, string &password, string &realName, string &saltPW, string &accName1, string &bal1, string &accName2, string &bal2, string &accName3, string &bal3) {
+	void readFile(string username, string& password, string& realName, string& saltPW, string& accName1, string& bal1, string& accName2, string& bal2, string& accName3, string& bal3) {
 		ifstream myFile;
 		string buffer;
 		string existingUser;
@@ -62,12 +62,8 @@ public:
 				myFile>>bal2;
 				myFile>>accName3;
 				myFile>>bal3;
-
-				myFile.seekg(0, ios::cur);
 			}			
 		}
-		cout << "Current pos: " << myFile.tellg() << endl;
-		cout << "Hello " << realName << "." << endl;
 
 		myFile.close();
 	}
@@ -148,61 +144,99 @@ public:
 			}
 		}
 		
-		//cout << "You have " << count/2 << " account(s) free." << endl;
-		count /= 2;
+		cout << "You have " << count/2 << " account(s) free." << endl;
 
 		myFile.close();
-
-		return count;
 	}
 
-	void changeInformation(string username, string& password, string& realName, string& saltPW, string& accName1, string& bal1, string& accName2, string& bal2, string& accName3, string& bal3) {
+	void changeAccountName(string username, string accName, string newName) {
 		FileManage manager;
-		ofstream myFile;
-		//username = "jyoung";
-		string placeholder = "!!!";
-		int count = 0;
-		int pos;
-		myFile.open("accInfo.txt", ios::app);
-		myFile.seekp(0, ios::beg);
-		cout << "Current pos: " << myFile.tellp() << endl; 
+		bool accountFound = manager.findAccount(username, accName);
+		
+		if (accountFound == true) {
+			manager.writeToTemp(username, accName, newName);
+		}
+		manager.writeToMain();
+	}
 
-		//find username given
-		if (manager.findUsername(username) == true) {
-			count = manager.countCharacters(username);
+	void changeAccountBalance(string username, string accBalance, string newBalance) {
+		FileManage manager;
+		bool accountFound = manager.findAccount(username, accBalance);
+		
+		if (accountFound == true) {
+			manager.writeToTemp(username, accBalance, newBalance);
+		}
+		manager.writeToMain();
+	}
+
+	void writeToTemp(string username, string existing, string updated) {
+		//to read in file
+		FileManage manager;
+		ifstream myFile;
+		myFile.open("accInfo.txt");
+		string line;
+		int i = 1;
+		int count = manager.countOccurrence(username, existing);
+		int totalCount = manager.countTotalOccurrence(existing);
+		int wordPos = (count + 1);
+		cout << "Count: " << count << endl;	
+		cout << "Word position is: " << wordPos << endl;
+		cout << "Total word occurrence is: " << totalCount << endl;
+		//to write to temp file
+		ofstream tempFile;
+		tempFile.open("temp.txt");
+		//read in from myFile
+
+		while (getline(myFile, line)) {
+			if (line != existing) {
+				tempFile << line << "\n";
+			}
+			else if (line == existing) {
+				if (i == wordPos) {
+					tempFile << updated << "\n";
+					existing = "@#$$^&$^&";
+				}
+				else if (i != wordPos) {
+					tempFile << line << "\n";
+					i++;
+				}
+			}
+		}
+		//counter to count how many times youve seen the word
+		//create array of same size and put values in array
+		//if (count == whatever)
+		//fill in that instance of the word
+		//ignore the word "count" times
+
+		myFile.close();
+		tempFile.close();	
+	}
+
+	void writeToMain() {
+		//to read in file
+		ifstream tempFile;
+		tempFile.open("temp.txt");
+		ofstream myFile;
+		//to write to main file
+		myFile.open("accInfo.txt");
+		string line;
+
+		//read in from myFile
+		while (getline(tempFile, line)) {
+			myFile << line << "\n";
 		}
 
-		//read in information under that username
-		manager.readFile(username, password, realName, saltPW, accName1, bal1, accName2, bal2, accName3, bal3);
-		pos = myFile.tellp();
-		cout << pos << endl;
-		
-		myFile.seekp(pos - count, ios::cur);
-		cout << "Current pos: " << pos << endl;  
-		
-		//change the information needed
-		//this will only be acc name and balance
-		myFile << username << "\n";
-		myFile << password << "\n";
-		myFile << realName << "\n";
-		myFile << saltPW << "\n";
-		myFile << accName1 << "\n";
-		myFile << bal1 << "\n";
-		myFile << accName2 << "\n";
-		myFile << bal2 << "\n";
-		myFile << accName3 << "\n";
-		myFile << bal3 << "\n";
-		myFile << placeholder << "\n";
-
 		myFile.close();
+		tempFile.close();
 	}
 
-	int countCharacters(string username) {
+	int countOccurrence(string username, string given) {
 		ifstream myFile;
 		myFile.open("accInfo.txt");
 		string buffer;
 		string existingUser;
 		int count = 0;
+		bool userFound;
 		
 		//check to see file opened correctly
 		if (myFile.fail()) {
@@ -210,30 +244,50 @@ public:
 			exit(1);
 		}
 
-		while(myFile.good()) {
-			myFile >> existingUser;
-			if (existingUser == username) {
-				while (buffer != "!!!") {
-					myFile >> buffer;
-					count += buffer.length();
-				}
+		while(buffer != username) {
+			myFile >> buffer;
+			if (buffer == given) {
+				count++;
 			}
 		}
-		cout << "Characters counted: " << count << endl;
+		//cout << "Instances counted: " << count << endl;
 		return count;
 		myFile.close();
 	}
-	
+
+	int countTotalOccurrence(string existing) {
+		ifstream myFile;
+		myFile.open("accInfo.txt");
+		string buffer;
+		int count = 0;
+				
+		//check to see file opened correctly
+		if (myFile.fail()) {
+			cerr << "Could not open file" << endl;
+			exit(1);
+		}
+
+		while (getline(myFile, buffer)) {
+			if (buffer == existing) {
+				count++;
+			}
+		}
+
+		//cout << "Total instances counted: " << count << endl;
+		return count;
+		myFile.close();
+	}
+
 	bool emptyFileCheck() {
 		int length;
 		ifstream myFile;
 
 		myFile.open("accInfo.txt");
-		myFile.seekg(0, ios::end); 
-		length = myFile.tellg(); 
+		myFile.seekg(0, ios::end); // put the "cursor" at the end of the file
+		length = myFile.tellg(); // find the position of the cursor
 		myFile.close();
 
-		if ( length == 0 ){
+		if (length == 0 ){
 			return true;
 		}
 		else {
@@ -247,4 +301,5 @@ public:
 		myFile.close();
 	}
 };
-# endif
+
+#endif
