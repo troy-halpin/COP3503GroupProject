@@ -76,30 +76,45 @@ int inputCzech() {
 *********************************************************************
 */
 
-User* czechUser(string realName, string userName, string password, string accountName) // new user
+void czechUsername(string user)
 {
 	bool userExists = false;
 	FileManage manager;
 
 	// read file to see if username exists
-	userExists = manager.findUsername(userName);
+	userExists = manager.findUsername(user);
 
-	if (!userExists)
-	{
-		// use the new user constructor
-		User* currentUser = new User(realName, userName, password);
-
-		// create default bank account
-		currentUser->createNewAccount(accountName);
-
-		currentUser->infoExport();
-
-		return currentUser;
-	}
-	else // another user has already claimed the username
+	if (userExists)
 	{
 		throw invalid_argument("This username is unavailable.");
 	}
+}
+
+void czechPassword(string pass)
+{
+	bool correctLength = false;
+	int length = pass.length();
+
+	if (length <= 6 || length >= 56)
+	{
+		throw invalid_argument("Password must be between 6 and 56 characters.");
+	}
+
+}
+
+User* czechUser(string realName, string userName, string password, string accountName) // new user
+{
+
+	// use the new user constructor
+	User* currentUser = new User(realName, userName, password);
+
+	// create default bank account
+	currentUser->createNewAccount(accountName);
+
+	currentUser->infoExport();
+
+	return currentUser;
+
 }
 
 User* czechUser(string userNameInput, string passwordInput) // existing user
@@ -134,6 +149,7 @@ User* czechUser(string userNameInput, string passwordInput) // existing user
 		throw invalid_argument("This username does not exist.");
 	}
 }
+
 
 void mainMenu(User* user) {
 	atMainMenu = true;
