@@ -187,19 +187,19 @@ public:
 
 	void takeAccountsOnline(string accName1, string accName2, string accName3, string bal1, string bal2, string bal3)
 	{
-		//double amount = stod(bal1);
+		double amount = string_to_double(bal1);
 
-		userAccounts[0] = new Account(accName1, 0);
+		userAccounts[0] = new Account(accName1, amount);
 
 		if (numberOfAccounts >= 2)
 		{
-			//amount = stod(bal2);
-			userAccounts[1] = new Account(accName2, 0);
+			amount = string_to_double(bal2);
+			userAccounts[1] = new Account(accName2, amount);
 		}
 		if (numberOfAccounts == 3)
 		{
-			//amount = stod(bal3);
-			userAccounts[2] = new Account(accName3, 0);
+			amount = string_to_double(bal3);
+			userAccounts[2] = new Account(accName3, amount);
 		}
 	}
 
@@ -234,7 +234,7 @@ public:
 	are two total accounts and providing a menu and options if
 	there are two more accounts a user can switch two. This is 
 	done by checking for eqality against the current account's
-	name and also against the null (nonexistant) account, "*".
+	name.
 
 	*************************************************************
 	*/
@@ -244,8 +244,7 @@ public:
 		int newAccountIndex = 0;
 		int otherAccountIndex = 4;		// 4 is simply an arbitrary int that cannot be an index,
 		int otherAccountIndex2 = 4;		// used to make sure that the otherAccount variables are not overwhited
-		string otherAccount = "";
-		string otherAccount2 = "";
+		string otherAccounts[3];
 
 		if (numberOfAccounts == 2)
 		{
@@ -260,39 +259,46 @@ public:
 		}
 		else	// number of accounts = 3
 		{
+
 			for (int i = 0; i < 3; i++)
 			{
-				if (userAccounts[i]->getAccountName() != currentAccount && userAccounts[i]->getAccountName() != "*")
+				otherAccounts[i] = userAccounts[i]->getAccountName();
+			}
+
+			for (int i = 0; i < 3; i++)
+			{
+				if (otherAccounts[i] != currentAccount)
 				{
-					if (otherAccount == "" && otherAccountIndex == 4)
+					if (otherAccountIndex == 4)
 					{
-						otherAccount = userAccounts[i]->getAccountName();
 						otherAccountIndex = i;
 					}
-					else
+					else if (otherAccountIndex2 == 4)
 					{
-						otherAccount2 = userAccounts[i]->getAccountName();
 						otherAccountIndex2 = i;
 					}
 				}
 			}
 
-			cout << "Which account would you like to switch to?" <<endl;
 			string choice;
-			cout << "1 - " << otherAccount << endl << "2 - " << otherAccount2 << endl;
+			cout << "1 - " << otherAccounts[otherAccountIndex] << endl << "2 - " << otherAccounts[otherAccountIndex2] << endl;
 			cin >> choice;
+
+			while (cin.fail() || ((choice != "1") && (choice != "2")))
+			{																	
+				cin.clear();
+				cin.ignore(1000, '\n');											// catch bad user input
+				cout << "\nEnter '1' or '2': ";
+				cin >> choice;
+			}
 
 			if (choice == "1")
 			{
 				newAccountIndex = otherAccountIndex;
 			}
-			else if (choice == "2")
+			if (choice == "2")
 			{
 				newAccountIndex = otherAccountIndex2;
-			}
-			else
-			{
-				throw invalid_argument("Please enter a digit, either '1' or '2'.");
 			}
 		}
 
@@ -327,6 +333,18 @@ public:
 		ostringstream numToString;
 		numToString << num;
 		return numToString.str() ;
+	}
+
+	double string_to_double(string str)
+	{
+		double num = 0.0;
+
+    	stringstream stringToDouble;
+
+    	stringToDouble << str;
+    	stringToDouble >> num;
+
+    	return num;
 	}
 };
 #endif
