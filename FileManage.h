@@ -8,9 +8,16 @@ using namespace std;
 
 class FileManage {
 public:
+	//write user's information to text file
 	void writeFile(string user, string pw, string name, string salt, string accName1, string bal1, string accName2, string bal2, string accName3, string bal3) {
 		ofstream myFile;
 		myFile.open("accInfo.txt", ios::app);
+
+		//check to see file opened successfully
+		if (myFile.fail()) {
+			throw "Could not open file";
+		}
+
 		string username = user;
 		string password = pw;
 		string realName = name;
@@ -23,6 +30,7 @@ public:
 		string balance3 = bal3;
 		string placeholder = "!!!";
 		
+		//write to file
 		myFile << username << "\n";
 		myFile << password << "\n";
 		myFile << realName << "\n";
@@ -38,18 +46,19 @@ public:
 		myFile.close();
 	}
 
+	//read inf information for given username
 	void readFile(string username, string& password, string& realName, string& saltPW, string& accName1, string& bal1, string& accName2, string& bal2, string& accName3, string& bal3) {
 		ifstream myFile;
 		string buffer;
 		string existingUser;
 		myFile.open("accInfo.txt");
 
-		//check to see file opened correctly
+		//check to see file opened successfully
 		if (myFile.fail()) {
-			cerr << "Could not open file" << endl;
-			exit(1);
+			throw "Could not open file";
 		}
 
+		//read in values after username is found
 		while (myFile.good()) {
 			myFile >> existingUser;
 			if (existingUser == username) {
@@ -76,8 +85,7 @@ public:
 
 		//check to see file opened correctly
 		if (myFile.fail()) {
-			cerr << "Could not open file" << endl;
-			exit(1);
+			throw "Could not open file";
 		}
 
 		while (myFile.good()) {
@@ -91,14 +99,14 @@ public:
 		myFile.close();
 	}
 
+	//check whether a certain user has an existing account with the name given
 	bool findAccount(string user, string account) {
 		ifstream myFile;
 		myFile.open("accInfo.txt");
 
 		//check to see file opened correctly
 		if (myFile.fail()) {
-			cerr << "Could not open file" << endl;
-			exit(1);
+			throw "Could not open file";
 		}
 
 		int count = 0;
@@ -118,25 +126,27 @@ public:
 		}
 	}
 
+	//find out how many free accounts someone has
 	int freeAccounts(string account) {
 		ifstream myFile;
 		myFile.open("accInfo.txt");
 
 		//check to see file opened correctly
 		if (myFile.fail()) {
-			cerr << "Could not open file" << endl;
-			exit(1);
+			throw "Could not open file";
 		}
 
 		int count = 0;
 		string existingUser;
 		string buffer;
 
+		//read in from myFile
 		while (myFile.good()) {
 			myFile >> existingUser;
 			if (existingUser == account) {
 				while (buffer != "!!!"){
 					myFile >> buffer;
+					//increase count for every "free account" found
 					if (buffer == "*") {
 						count++;
 					}
@@ -149,6 +159,7 @@ public:
 		myFile.close();
 	}
 
+	//change a user's account name
 	void changeAccountName(string username, string accName, string newName) {
 		FileManage manager;
 		bool accountFound = manager.findAccount(username, accName);
@@ -159,6 +170,7 @@ public:
 		manager.writeToMain();
 	}
 
+	//change a user's account balance
 	void changeAccountBalance(string username, string accBalance, string newBalance) {
 		FileManage manager;
 		bool accountFound = manager.findAccount(username, accBalance);
@@ -169,28 +181,40 @@ public:
 		manager.writeToMain();
 	}
 
+	//read in from accInfo and export to temp file
 	void writeToTemp(string username, string existing, string updated) {
 		//to read in file
 		FileManage manager;
-		ifstream myFile;
-		myFile.open("accInfo.txt");
 		string line;
 		int i = 1;
 		int count = manager.countOccurrence(username, existing);
 		int totalCount = manager.countTotalOccurrence(existing);
 		int wordPos = (count + 1);
-		cout << "Count: " << count << endl;	
-		cout << "Word position is: " << wordPos << endl;
-		cout << "Total word occurrence is: " << totalCount << endl;
+		
+		//open file to read in from
+		ifstream myFile;
+		myFile.open("accInfo.txt");
+
+		//check to see file opened successfully
+		if (myFile.fail()) {
+			throw "Could not open file";
+		}
+
 		//to write to temp file
 		ofstream tempFile;
 		tempFile.open("temp.txt");
-		//read in from myFile
 
+		//check to see file opened successfully
+		if (myFile.fail()) {
+			throw "Could not open file";
+		}
+
+		//read in from myFile
 		while (getline(myFile, line)) {
 			if (line != existing) {
 				tempFile << line << "\n";
 			}
+			//if word is found replace with updated word
 			else if (line == existing) {
 				if (i == wordPos) {
 					tempFile << updated << "\n";
@@ -202,16 +226,12 @@ public:
 				}
 			}
 		}
-		//counter to count how many times youve seen the word
-		//create array of same size and put values in array
-		//if (count == whatever)
-		//fill in that instance of the word
-		//ignore the word "count" times
 
 		myFile.close();
 		tempFile.close();	
 	}
 
+	//read in from temp and export to accInfo
 	void writeToMain() {
 		//to read in file
 		ifstream tempFile;
@@ -221,7 +241,8 @@ public:
 		myFile.open("accInfo.txt");
 		string line;
 
-		//read in from myFile
+		//read in from tempFile
+		//read out to myFile
 		while (getline(tempFile, line)) {
 			myFile << line << "\n";
 		}
@@ -230,6 +251,7 @@ public:
 		tempFile.close();
 	}
 
+	//count how many times an account name appears before given username
 	int countOccurrence(string username, string given) {
 		ifstream myFile;
 		myFile.open("accInfo.txt");
@@ -240,21 +262,21 @@ public:
 		
 		//check to see file opened correctly
 		if (myFile.fail()) {
-			cerr << "Could not open file" << endl;
-			exit(1);
+			throw "Could not open file";
 		}
 
+		//increase count if word is found before username
 		while(buffer != username) {
 			myFile >> buffer;
 			if (buffer == given) {
 				count++;
 			}
 		}
-		//cout << "Instances counted: " << count << endl;
 		return count;
 		myFile.close();
 	}
 
+	//count total time an account name appears
 	int countTotalOccurrence(string existing) {
 		ifstream myFile;
 		myFile.open("accInfo.txt");
@@ -263,28 +285,34 @@ public:
 				
 		//check to see file opened correctly
 		if (myFile.fail()) {
-			cerr << "Could not open file" << endl;
-			exit(1);
+			throw "Could not open file";
 		}
 
+		//increase count if word is found
 		while (getline(myFile, buffer)) {
 			if (buffer == existing) {
 				count++;
 			}
 		}
 
-		//cout << "Total instances counted: " << count << endl;
 		return count;
 		myFile.close();
 	}
 
+	//check if file is empty
 	bool emptyFileCheck() {
 		int length;
 		ifstream myFile;
-
 		myFile.open("accInfo.txt");
-		myFile.seekg(0, ios::end); // put the "cursor" at the end of the file
-		length = myFile.tellg(); // find the position of the cursor
+
+		//check if file opened successfully
+		if (myFile.fail()) {
+			throw "Could not open file";
+		}
+
+		//find size of file
+		myFile.seekg(0, ios::end);
+		length = myFile.tellg();
 		myFile.close();
 
 		if (length == 0 ){
@@ -295,9 +323,16 @@ public:
 		}
 	}
 
+	//erase file
 	void clearFile() {
 		ofstream myFile;
 		myFile.open("accInfo.txt", ofstream::out | ofstream::trunc);
+
+		//check if file opened successfully 
+		if (myFile.fail()) {
+			throw "Could not open file";
+		}
+
 		myFile.close();
 	}
 };
