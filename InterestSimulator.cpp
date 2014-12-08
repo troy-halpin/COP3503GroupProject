@@ -1,4 +1,4 @@
-#include "interestSimulator.h"
+#include "InterestSimulator.h"
 #include "Account.h"
 #include <string>
 #include <iostream>
