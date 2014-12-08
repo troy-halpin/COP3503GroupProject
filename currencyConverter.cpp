@@ -2,34 +2,42 @@
 #include "Account.h"
 #include <iostream>
 #include <string>
+#include <sstream>
 
 using namespace std;
 
 unsigned int getCurrency()								// function that determines the currency from user input
 {
+	string input = "";
 	unsigned int currencyChoice = 0;
 	
-	cout << "\nChoose currency (Enter a number 1-10):\n" << 	
-	"	(1) Euros\n" <<
-	"	(2) British Pounds\n" <<
-	"	(3) Indian Rupees\n" <<
-	"	(4) Australian Dollars\n" <<
-	"	(5) Canadian Dollars\n" <<							// lists currency options
-	"	(6) Singapore Dollars\n" <<
-	"	(7) Brazilian Reals\n" <<
-	"	(8) Mexican Pesos\n" <<
-	"	(9) South African Rands\n" <<
-	"	(10) Japanese Yen\n" << endl;
-
-	cout << "Choice: ";										// get currency choice
-	cin >> currencyChoice;
-
-	while (cin.fail() || currencyChoice > 10)				// catches incorrect input 
+	while (true)
 	{
-		cin.clear();
-		cin.ignore(1000, '\n');
-		cout << "\nPlease enter a number between 1 and 10 to choose a currency: ";
-		cin >> currencyChoice;
+		cout << "\nChoose currency (Enter a number 1-10):\n" << 	
+		"	(1) Euros\n" <<
+		"	(2) British Pounds\n" <<
+		"	(3) Indian Rupees\n" <<
+		"	(4) Australian Dollars\n" <<
+		"	(5) Canadian Dollars\n" <<							// lists currency options
+		"	(6) Singapore Dollars\n" <<
+		"	(7) Brazilian Reals\n" <<
+		"	(8) Mexican Pesos\n" <<
+		"	(9) South African Rands\n" <<
+		"	(10) Japanese Yen\n" << endl;
+
+		cout << "Choice: ";										// get currency choice
+		getline(cin, input);
+		stringstream ss1(input);
+
+		if (ss1 >> currencyChoice)									// checks that input is a positive number or 0
+		{
+			if ((currencyChoice > 0) && (currencyChoice < 11))		// checks that input is between 1 and 10
+			{
+				break;
+			}
+		}
+
+		cout << "You must enter a number between 1 and 10 to choose a currency." << endl;		// prints if input is bad
 	}
 
 	return currencyChoice;	
@@ -209,28 +217,38 @@ double convert_From(unsigned int currencyChoice, currencyConverter* cc)	// funct
 
 void withdraw(Account* a)			// function that combines all other functions to physically withdraw
 {								//  the amount given by the user and (possibly) show amount in another currency
-	double amt = 0.0;												
-	cout << "\nEnter amount to withdraw (in USD): ";							
-	cin >> amt;														// get withdraw amount from user
-
-	while (cin.fail() || (amt < 0.0) || (fmod((amt * 1000.0), 10.0) != 0)) // if amt is negative or more than 2 decimal places,		
-	{																		
-		cin.clear();														
-		cin.ignore(1000, '\n');											// catch bad input
-		cout << "\nPlease enter a positive amount with up to 2 decimal places: ";							
-		cin >> amt;															
-	}								
-
-	cout << "\nChange currency from US Dollars? Y/N" << endl;		// ask user whether to change currency or not 
+	string input =  "";
 	string choice = "";
-	cin >> choice;
+	double amt = 	0.0;												
+	
+	while (true)
+	{
+		cout << "\nEnter amount to withdraw (in USD): ";			// get withdraw amount
+		getline(cin, input);
+		stringstream ss2(input);
 
-	while (cin.fail() || ((choice != "Y") && (choice != "N") && (choice != "y") && (choice != "n")))
-	{																	
-		cin.clear();
-		cin.ignore(1000, '\n');											// catch bad user input
-		cout << "\nEnter 'Y' or 'N': ";
-		cin >> choice;
+		if (ss2 >> amt)													// checks that input is a double
+		{
+			if ((amt >= 0) && (fmod((amt * 1000.0), 10.0) == 0))		// checks that input is positive (or 0) and up to 2 decimal places
+			{
+				break;
+			}
+		}
+
+		cout << "You must enter a positive amount with up to 2 decimal places." << endl;	// prints if input is bad
+	}							
+
+	while (true)
+	{
+		cout << "\nChange currency from US Dollars? Y/N" << endl;		// ask user whether to change currency or not 
+		getline(cin, choice);													// get choice
+
+		if ((choice == "Y") || (choice == "y") || (choice == "N") || (choice == "n"))		// checks if input is "y", "Y", "n" or "N"
+		{
+			break;
+		}
+
+		cout << "You must enter 'Y' or 'N'." << endl;			// prints otherwise
 	}
 
 	if ((choice == "Y") || (choice == "y"))							// y = yes, change currency
@@ -250,33 +268,43 @@ void withdraw(Account* a)			// function that combines all other functions to phy
 
 void deposit(Account* a)		// function that combines all other functions to physically deposit
 {									// amount from user into account and convert to USD if necessary
-	double amt = 0.0;
-	cout << "\nAre you depositing in another currency (not USD)? Y/N" << endl;	// ask user if using different currency
+	string input = 	"";
 	string choice = "";
-	cin >> choice;
+	double amt = 	0.0;
 
-	while (cin.fail() || ((choice != "Y") && (choice != "N") && (choice != "y") && (choice != "n")))
-	{																	
-		cin.clear();
-		cin.ignore(1000, '\n');											// catch bad user input
-		cout << "\nEnter 'Y' or 'N': ";
-		cin >> choice;
+	while (true)
+	{
+		cout << "\nAre you depositing in another currency (not USD)? Y/N" << endl;	// ask user if using different currency
+		getline(cin, choice);																// get choice
+
+		if ((choice == "Y") || (choice == "y") || (choice == "N") || (choice == "n"))	// checks for correct input
+		{
+			break;
+		}
+
+		cout << "You must enter 'Y' or 'N'." << endl;					// prints if input is bad
 	}
 
 	if ((choice == "Y") || (choice == "y"))								// y = yes, different currency
 	{
 		unsigned int currencyChoice = getCurrency();					// get currency from user
 		
-		cout << "\nEnter amount to deposit: ";					// get deposit amount from user in that currency
-		cin >> amt;																	
+		while (true)
+		{
+			cout << "\nEnter amount to deposit: ";					// get deposit amount from user in that currency
+			getline(cin, input);
+			stringstream ss3(input);
 
-		while (cin.fail() || (amt < 0.0) || (fmod((amt * 1000.0), 10.0) != 0)) // if amt is negative or more than 2 decimal places,	
-		{																			
-			cin.clear();														
-			cin.ignore(1000, '\n');												// catch bad input
-			cout << "\nPlease enter a positive amount with up to 2 decimal places: ";							
-			cin >> amt;															
-		}																
+			if (ss3 >> amt)												// checks that input is a double
+			{
+				if ((amt >= 0) && (fmod((amt * 1000.0), 10.0) == 0))		// checks that input is positive or 0 and up to 2 decimal places
+				{
+					break;
+				}
+			}
+
+			cout << "You must enter a positive amount with up to 2 decimal places." << endl;		// prints if input is bad
+		}																													
 
 		currencyConverter* cc = new currencyConverter(amt);			// create the currency converter as an object
 		double deposited_Amt = convert_From(currencyChoice, cc);	// convert amount to USD
@@ -286,15 +314,21 @@ void deposit(Account* a)		// function that combines all other functions to physi
 
 	else														// n = no, deposit in USD
 	{
-		cout << "\nEnter amount to deposit: ";					// get deposit amount from user		
-		cin >> amt;																	
-
-		while (cin.fail() || (amt < 0.0) || (fmod((amt * 1000.0), 10.0) != 0)) // if amt is negative or more than 2 decimal places,			
+		while (true)
 		{
-			cin.clear();														
-			cin.ignore(1000, '\n');								// catch bad input
-			cout << "\nPlease enter a positive amount with up to 2 decimal places: ";					
-			cin >> amt;														
+			cout << "\nEnter amount to deposit: ";					// get deposit amount from user in that currency
+			getline(cin, input);
+			stringstream ss4(input);
+
+			if (ss4 >> amt)													// checks that input is a double
+			{
+				if ((amt >= 0) && (fmod((amt * 1000.0), 10.0) == 0))		// checks that input is positive or 0 and up to 2 decimal places
+				{
+					break;
+				}
+			}
+
+			cout << "You must enter a positive amount with up to 2 decimal places." << endl;	// prints if input is bad
 		}
 
 		a->deposit(amt);								// deposit amount (in USD) into account
