@@ -99,7 +99,7 @@ int runSimulator(interestSimulator* i)				// function that calls other functions
 								break;
 							}
 
-							cout << "The number of compounds per year must be a positive integer.";		// prints if input is bad
+							cout << "The number of compounds per year must be a positive integer." << endl;		// prints if input is bad
 						}
 
 						futureBalance = i->periodic_cmpd(n);				// calculate future balance with periodic 
@@ -124,7 +124,7 @@ int runSimulator(interestSimulator* i)				// function that calls other functions
 								}
 							}
 
-							cout << "The investment amount must be a positive decimal value.";		// prints if input is bad
+							cout << "The investment amount must be a positive decimal value." << endl;		// prints if input is bad
 						}
 
 						while (true)
@@ -137,7 +137,7 @@ int runSimulator(interestSimulator* i)				// function that calls other functions
 								break;
 							}
 
-							cout << "You must enter the word 'beginning' or the word 'end'.";	// prints otherwise
+							cout << "You must enter the word 'beginning' or the word 'end'." << endl;	// prints otherwise
 						}
 
 						futureBalance = i->investment_cmpd(investAmt, timeOfYear);		// calculate future balance with annual 
