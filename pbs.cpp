@@ -1,6 +1,6 @@
 #include <iostream>
-//#include <stdlib.h>
 #include <stdexcept>
+#include <sstream>
 #include "User.h"
 #include "FileManage.h"
 #include "Account.h"
@@ -9,22 +9,55 @@
 using namespace std;
 
 bool userLogOut = false;
+bool atMainMenu = false;
+bool atFirstMenu = false;		
 
-//There are a lot of times where we take digit inputs from the user, so to make life easier I just wrote this to call each time we take in an input
+// cout << choice << endl;
+// cout << "this is atMainMenu " << atMainMenu << " <- should be 1 " << endl;
+// cout << "this is atFirstMenu " << atFirstMenu << "<- should be 0" << endl;
+
+
+//There are a lot of times where we take digit inputs from the user, 
+//so this function will ensures the input is not a char, string, negative number, etc
 int inputCzech() {
-	int input;
-	cin >> input;
-	cin.clear();
-	cin.ignore(10000, '\n');  
+	string input;
+	
+	int choice;// = 0;
 
-    while ((cin.fail()) || (input < 1)) {
-	    cin.clear();               
-	    cin.ignore(10000, '\n');   
-	    cout << "Sorry, your input was not valid, please try again." << endl;
-	    cin >> input;
+	
+	while (true) {
+		getline(cin, input);
+		stringstream ss(input);
+		if (ss >> choice) {
+			if (choice > 0) {
+				if (atFirstMenu && choice < 4) {
+					ss.str("");
+					break;
+				}
+				if (atMainMenu && choice < 9) {
+					cout << "we made a menu choice" << endl;
+					ss.str("");
+					break;
+				}
+			}
+		}
+
+		cout << "Sorry, your input was not valid, please try again." << endl;
 	}
 
-	return input;
+	cout << choice << endl;
+	// cin >> input;
+	// cin.clear();
+	// cin.ignore(10000, '\n');  
+
+ //    while ((cin.fail()) || (input < 1)) {
+	//     cin.clear();               
+	//     cin.ignore(10000, '\n');   
+	//     cout << "Sorry, your input was not valid, please try again." << endl;
+	//     cin >> input;
+	// }
+
+	return choice;
 }
 
 /********************************************************************
@@ -39,6 +72,7 @@ int inputCzech() {
 	reading the user information from the database, initializing the 
 	User for the main, creating the User's bank accounts, and 
 	determining password correctness.
+
 *********************************************************************
 */
 
@@ -102,15 +136,15 @@ User* czechUser(string userNameInput, string passwordInput) // existing user
 }
 
 void mainMenu(User* user) {
-
+	atMainMenu = true;
 	Account* currAccount = user->grabAccount();
 
 	cout << "In order to ensure that your operations are saved, please remember to fully log out when you are finished!" << endl;
 	cout << "How can we help you today?" << endl;
-	int x = 0;
-	while (x != 8) {
+	int x; //= 0;
+	while (true) {
 		cout <<
-		"=====================================\n \
+		"\t\t=====================================\n \
 		Enter 1 to Check Balance\n  \
 		Enter 2 to Deposit Funds \n \
 		Enter 3 to Withdraw Funds\n \
@@ -147,13 +181,14 @@ void mainMenu(User* user) {
 	   			//withdraw
 	   			withdrawFunds(currAccount);
 	   			//user->infoExport();
-	   			break;}
+	   			break;
+	   		}
 
 	   		case 4:
 	   		{
 	   			//transfer
 	   			/*  Special note-- This was originally a function in the account class, but we realized that having to transfer to another account involves
-	   				 having another account, which the account class is not equipped for. So the transfer function was placed here instead                */
+	   				having another account, which the account class is not equipped for. So the transfer function was placed here instead                */
 	   			
 	   			
 	   			cout << "How much would you like to transfer? Please note that all transfers must be of values greater than or equal to $1" << endl;
@@ -213,7 +248,7 @@ void mainMenu(User* user) {
 	   		case 6:
 	   		{
 	   			//switch accounts
-	   			cout << "What accound would you like to switch to?" << endl;
+	   			cout << "What account would you like to switch to?" << endl;
 	   			//List of accounts function
 	   			int numAccts = user->getNumberOfAccounts();
 	   			
@@ -250,6 +285,7 @@ void mainMenu(User* user) {
 	   				cout << user->getRealName() << ", thank you for using the PBS. Have a great day!" << endl;
 	   				//user->infoExport();
 	   				userLogOut = true;
+	   				atMainMenu = false;
 	   				break;
 	   			}
 	   			
@@ -264,6 +300,8 @@ void mainMenu(User* user) {
 
 int main(void){
 	bool firstLaunch = true;
+	atFirstMenu = true;
+
 	while (true) {
 		int x = 0;
 		if (firstLaunch) {
@@ -277,8 +315,6 @@ int main(void){
 		FileManage manager;
 
 		if (x == 1) {
-			//cout << "is this file empty? " << manager.emptyFileCheck() << endl;
-
 			
 			while (true) {
 
@@ -294,20 +330,22 @@ int main(void){
 					getline(cin, username);
 					cout<<"Enter your password."<<endl;
 					getline(cin, password);
-					cout << "Or enter 'back' to go back" << endl;
 
 					try {									  // try should go back to choice of the user
 						user = czechUser(username, password); //checkUser
-						break;
+						
 					} catch (exception &e) {
 						cerr << e.what() << endl;
+						break;
 					}
 				}
 
 				cout << "Welcome " << user->getRealName() << "!\n" << endl;
-		
+				
+				atFirstMenu = false;
 				mainMenu(user);
-				x = 3;
+				break;
+				//x = 3;
 			}
 		}
 		else if (x == 2) {
@@ -322,15 +360,16 @@ int main(void){
 
 			while (true) {	
 				cout<<"Enter your name."<< endl;
-				cin>>name;
+				getline(cin, name);
 				cout<<"Enter your desired username."<<endl;
-				cin>>username;
+				getline(cin, username);
+				//cout << "you should have entered a username here" << endl;
 				cout<<"Please enter a password that is between 6 and 56 characters, exclusive." << endl;
-				cin>>password;
-				cout<<"Enter account type \n 1: Checkings \n 2: Savings"<<endl;
+				getline(cin, password);
+				cout<<"Enter account type \n 1: Checking \n 2: Savings"<<endl;
 				accountType = inputCzech();
 				cout << "What would you like to call this account?" << endl;
-				cin >> accountName;
+				getline(cin, accountName);
 
 				try{
 					user = czechUser(name, username, password, accountName);
@@ -340,13 +379,15 @@ int main(void){
 					cerr << e.what() << endl;
 				}
 			}
+			atFirstMenu = false;
 			mainMenu(user);
-			x = 3;
+			//x = 3;
 		}
 		
 		else if (x == 3) {
 			if (!userLogOut) {
 				cout << "Thank you for using PBS, have a nice day!" << endl;
+				atFirstMenu = false;
 				break;
 			} else {
 				break;
