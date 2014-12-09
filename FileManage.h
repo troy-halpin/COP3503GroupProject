@@ -72,16 +72,22 @@ public:
 		string existingUser;
 		myFile.open("accInfo.txt");
 
+
 		//check to see file opened correctly
 		if (myFile.fail()) {
 			throw "Could not open file";
 		}
 
 		while (myFile.good()) {
+
 			myFile >> existingUser;
-			//cout<<existingUser<<"\n";
+
 			if (existingUser == username) {
+
 				return true;
+			} else {
+
+				return false;
 			}			
 		}
 
@@ -154,35 +160,20 @@ public:
 	}
 
 	//change a user's account name
-	void changeAccountName(string username, string accName, string newName) {
+	void changeAccountInformation(string username, string pw, string name, string salt, string accName1, string bal1, string accName2, string bal2, string accName3, string bal3) {
 		FileManage manager;
-		bool accountFound = manager.findAccount(username, accName);
 		
-		if (accountFound == true) {
-			manager.writeToTemp(username, accName, newName);
-		}
+		manager.writeToTemp(username);
 		manager.writeToMain();
-	}
-
-	//change a user's account balance
-	void changeAccountBalance(string username, string accBalance, string newBalance) {
-		FileManage manager;
-		bool accountFound = manager.findAccount(username, accBalance);
-		
-		if (accountFound == true) {
-			manager.writeToTemp(username, accBalance, newBalance);
-		}
-		manager.writeToMain();
+		manager.writeFile(username, pw, name, salt, accName1, bal1, accName2, bal2, accName3, bal3);
 	}
 
 	//read in from accInfo and export to temp file
-	void writeToTemp(string username, string existing, string updated) {
+	void writeToTemp(string username) {
 		//to read in file
 		FileManage manager;
 		string line;
-		int i = 1;
-		int count = manager.countOccurrence(username, existing);
-		int wordPos = (count + 1);
+		string skip;
 		
 		//open file to read in from
 		ifstream myFile;
@@ -204,18 +195,12 @@ public:
 
 		//read in from myFile
 		while (getline(myFile, line)) {
-			if (line != existing) {
+			if (line != username) {
 				tempFile << line << "\n";
 			}
-			//if word is found replace with updated word
-			else if (line == existing) {
-				if (i == wordPos) {
-					tempFile << updated << "\n";
-					existing = "@#$$^&$^&";
-				}
-				else if (i != wordPos) {
-					tempFile << line << "\n";
-					i++;
+			else if (line == username) {
+				for (int i = 0; i < 10; i++) {
+					myFile >> skip;
 				}
 			}
 		}
