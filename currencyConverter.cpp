@@ -1,4 +1,4 @@
-#include "currencyConverter.h"
+#include "CurrencyConverter.h"
 #include "Account.h"
 #include <iostream>
 #include <string>
@@ -215,7 +215,7 @@ double convert_From(unsigned int currencyChoice, currencyConverter* cc)	// funct
 	return deposited_Amt;
 }
 
-void withdraw(Account* a)			// function that combines all other functions to physically withdraw
+void withdrawFunds(Account* a)			// function that combines all other functions to physically withdraw
 {								//  the amount given by the user and (possibly) show amount in another currency
 	string input =  "";
 	string choice = "";
@@ -266,7 +266,7 @@ void withdraw(Account* a)			// function that combines all other functions to phy
 	}
 }
 
-void deposit(Account* a)		// function that combines all other functions to physically deposit
+void depositFunds(Account* a)		// function that combines all other functions to physically deposit
 {									// amount from user into account and convert to USD if necessary
 	string input = 	"";
 	string choice = "";
@@ -334,24 +334,3 @@ void deposit(Account* a)		// function that combines all other functions to physi
 		a->deposit(amt);								// deposit amount (in USD) into account
 	}
 }
-
-int main()				// just for testing purposes
-{
-	// ***** choose account (made an account for testing purposes) *****
-	string  name = 	"Checking";
-	double  bal = 	331.95;
-	int 	type = 	1;
-
-	Account* a = new Account(name, bal, type);
-
-	//withdrawing
-	withdraw(a);
-
-	//depositing
-	deposit(a);
-	
-	// ***** return to main menu *****
-
-	return 0;
-}
-
