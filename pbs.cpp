@@ -449,6 +449,3 @@ int main(void){
 
 	return 0;
 }
-
-// look for 0s
-//add account won\t take another word
