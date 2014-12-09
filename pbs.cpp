@@ -9,12 +9,7 @@
 using namespace std;
 
 bool userLogOut = false;
-bool atMainMenu = false;
-bool atFirstMenu = false;		
-
-// cout << choice << endl;
-// cout << "this is atMainMenu " << atMainMenu << " <- should be 1 " << endl;
-// cout << "this is atFirstMenu " << atFirstMenu << "<- should be 0" << endl;
+bool atMainMenu = false;	
 
 
 //There are a lot of times where we take digit inputs from the user, 
@@ -22,38 +17,9 @@ bool atFirstMenu = false;
 int inputCzech() {
 	string input;
 	
-	int choice;// = 0;
+	int choice;
 
-	
-	// while (true) {
-	// 	getline(cin, input);
-	// 	stringstream ss(input);
-	// 	if (ss >> choice) {
-	// 		if (choice > 0) {
-	// 			if (atFirstMenu && choice < 4) {
-	// 				ss.str("");
-	// 				break;
-	// 			}
-	// 			if (atMainMenu && choice < 9) {
-	// 				cout << "we made a menu choice" << endl;
-	// 				ss.str("");
-	// 				break;
-	// 			}
-	// 		}
-	// 	}
-
-	// 	cout << "Sorry, your input was not valid, please try again." << endl;
-	// }
-
-	// cout << choice << endl;
 	cin >> choice;
-	// while (true) {
-	// 	if (choice < 1 || > 10) {
-	// 		cin >> choice;
-	// 	}
-	// }
-	// cin.clear();
-	// cin.ignore(10000, '\n');  
 
     while ((cin.fail()) || (choice < 1)) {
     	cout << choice << endl;
@@ -62,7 +28,7 @@ int inputCzech() {
 	    cout << "Sorry, your input was not valid, please try again." << endl;
 	    cin >> choice;
 	}
-
+	//clear cin again for next input
 	cin.ignore(10000, '\n');
 	return choice;
 }
@@ -83,14 +49,14 @@ int inputCzech() {
 *********************************************************************
 */
 
-void czechUsername(string user)
+void czechUsername(string username)
 {
 	bool userExists = false;
 	cout << userExists << endl;
 	FileManage manager;
 
 	// read file to see if username exists
-	userExists = manager.findUsername(user);
+	userExists = manager.findUsername(username);
 	cout << userExists << endl;
 
 	if (userExists)
@@ -273,7 +239,7 @@ void mainMenu(User* user) {
 	   		case 6:
 	   		{
 	   			//switch accounts
-	   			cout << "What account would you like to switch to?" << endl;
+	   			
 	   			//List of accounts function
 	   			int numAccts = user->getNumberOfAccounts();
 	   			
@@ -288,7 +254,9 @@ void mainMenu(User* user) {
 	   				currAccount = user->grabAccount(currAccountName);
 	   				cout << "Operation complete, you are now accessing " << currAccount->getAccountName() << endl;
 	   			} else {
+					cout << "What account would you like to switch to?" << endl;
 	   				currAccount = user->grabAccount(currAccount->getAccountName());
+	   				cout << "Operation complete, you are now accessing " << currAccount->getAccountName() << endl;
 	   			}
 	   			//user->infoExport();
 	   			break;
@@ -300,7 +268,7 @@ void mainMenu(User* user) {
 	   			interestSimulator* i = createSimulator(currAccount);		
 	   			runSimulator(i);
 	   			delete i;
-	   			//cout << "InterestSimulator" << endl;
+
 
 	   			break;
 	   		}
@@ -325,8 +293,7 @@ void mainMenu(User* user) {
 
 int main(void){
 	bool firstLaunch = true;
-	atFirstMenu = true;
-
+	
 	while (true) {
 		int x = 0;
 		if (firstLaunch) {
@@ -368,7 +335,7 @@ int main(void){
 
 				cout << "Welcome " << user->getRealName() << "!\n" << endl;
 				
-				atFirstMenu = false;
+				
 				mainMenu(user);
 				break;
 				//x = 3;
@@ -391,7 +358,6 @@ int main(void){
 					cout<<"Enter your desired username."<<endl;
 					getline(cin, username);
 					czechUsername(username);
-					//cout << "you should have entered a username here" << endl;
 					cout<<"Please enter a password that is between 6 and 56 characters, exclusive." << endl;
 					getline(cin, password);
 					czechPassword(password);
@@ -404,11 +370,11 @@ int main(void){
 					user = czechUser(name, username, password, accountName);
 					cout << user->getRealName() << ", thank you for choosing PBS for all your personal banking needs." << endl;
 					break;
-				} catch (exception &e) {
+				} catch (exception& e) {
 					cerr << e.what() << endl;
 				}
 			}
-			atFirstMenu = false;
+			
 			mainMenu(user);
 			//x = 3;
 		}
@@ -416,7 +382,7 @@ int main(void){
 		else if (x == 3) {
 			if (!userLogOut) {
 				cout << "Thank you for using PBS, have a nice day!" << endl;
-				atFirstMenu = false;
+				
 				break;
 			} else {
 				break;
