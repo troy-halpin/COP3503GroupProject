@@ -19,6 +19,7 @@ int inputCzech() {
 	
 	int choice;
 
+	cout << '>';
 	cin >> choice;
 
     while ((cin.fail()) || (choice < 1)) {
@@ -70,7 +71,7 @@ void czechPassword(string pass)
 	//bool correctLength = false;
 	int length = pass.length();
 
-	if (length <= 6 || length >= 56)
+	if (length < 6 || length >= 56)
 	{
 		throw invalid_argument("Password must be between 6 and 56 characters.");
 	}
@@ -349,28 +350,45 @@ int main(void){
 			int accountType;
 			string accountName;
 			User* user;
+			string accType;
 
 
 			while (true) {
 				try {	
+
 					cout<<"Enter your name."<< endl;
 					getline(cin, name);
+
 					cout<<"Enter your desired username."<<endl;
 					getline(cin, username);
 					czechUsername(username);
+
 					cout<<"Please enter a password that is between 6 and 56 characters, exclusive." << endl;
 					getline(cin, password);
 					czechPassword(password);
+
 					cout<<"Enter account type \n 1: Checking \n 2: Savings"<<endl;
 					accountType = inputCzech();
+					if (accountType == 1) {
+						accType = "checking";
+					}
+					else {
+						accType = "savings";
+					}
+
 					cout << "What would you like to call this account?" << endl;
 					getline(cin, accountName);
+
+					cout << "Successfully created your " << accType << " account, " << accountName << endl;
 
 
 					user = czechUser(name, username, password, accountName);
 					cout << user->getRealName() << ", thank you for choosing PBS for all your personal banking needs." << endl;
+
 					break;
+
 				} catch (exception& e) {
+
 					cerr << e.what() << endl;
 				}
 			}
@@ -385,6 +403,7 @@ int main(void){
 				
 				break;
 			} else {
+				
 				break;
 			}
 		}
