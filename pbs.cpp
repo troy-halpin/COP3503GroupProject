@@ -23,7 +23,7 @@ int inputCzech() {
 	cin >> choice;
 
     while ((cin.fail()) || (choice < 1)) {
-    	cout << choice << endl;
+    	
 	    cin.clear();               
 	    cin.ignore(10000, '\n');   
 	    cout << "Sorry, your input was not valid, please try again." << endl;
@@ -181,7 +181,7 @@ void mainMenu(User* user) {
 	    	{
 	    		//check balance
 	    		cout << "The balance in " << currAccount->getAccountName() << " is: " << currAccount->getAccountBalance() << endl;
-	    		cout << "The number of accounts is " << user->getNumberOfAccounts() << endl;
+	    		
 	    		break;
 	    	}
 
@@ -189,7 +189,7 @@ void mainMenu(User* user) {
 	   		{
 	   			//deposit
 	   			depositFunds(currAccount);
-	   			//user->infoExport();
+	   			user->infoExport();
 	   			break;
 	   		}
 
@@ -197,7 +197,7 @@ void mainMenu(User* user) {
 	   		{
 	   			//withdraw
 	   			withdrawFunds(currAccount);
-	   			//user->infoExport();
+	   			user->infoExport();
 	   			break;
 	   		}
 
@@ -242,7 +242,7 @@ void mainMenu(User* user) {
 	   				cout << temp->getAccountName() << ": " << temp->getAccountBalance() << endl;
 	   							
 	   			
-	   				//user->infoExport();
+	   				user->infoExport();
 	   				break;
 	   		}
 
@@ -258,7 +258,7 @@ void mainMenu(User* user) {
 	   			} catch (exception& e) {
 	   				 cerr << e.what() << endl;
 	   			}
-	   			//user->infoExport();
+	   			user->infoExport();
 	   			break;
 	   		}
 
@@ -284,7 +284,7 @@ void mainMenu(User* user) {
 	   				currAccount = user->grabAccount(currAccount->getAccountName());
 	   				cout << "Operation complete, you are now accessing " << currAccount->getAccountName() << endl;
 	   			}
-	   			//user->infoExport();
+	   			user->infoExport();
 	   			break;
 	   		}
 
@@ -302,7 +302,7 @@ void mainMenu(User* user) {
 	   			{
 	   				//logout
 	   				cout << user->getRealName() << ", thank you for using the PBS. Have a great day!" << endl;
-	   				//user->infoExport();
+	   				user->infoExport();
 	   				userLogOut = true;
 	   				atMainMenu = false;
 	   				break;
@@ -323,7 +323,7 @@ int main(void){
 	while (true) {
 		int x = 0;
 		if (firstLaunch) {
-			cout<<"Welcome to the Personal Banking Software!"<<endl;
+			cout<<"\n Welcome to the Personal Banking Software!"<<endl;
 			firstLaunch = false;
 		}
 		cout<<endl;
@@ -418,7 +418,7 @@ int main(void){
 
 
 					user = czechUser(name, username, password, accountName);
-					cout << user->getRealName() << ", thank you for choosing PBS for all your personal banking needs.\n" << endl;
+					cout << "\n" << user->getRealName() << ", thank you for choosing PBS for all your personal banking needs.\n" << endl;
 
 					break;
 
@@ -449,3 +449,6 @@ int main(void){
 
 	return 0;
 }
+
+// look for 0s
+//add account won\t take another word
