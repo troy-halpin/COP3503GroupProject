@@ -25,38 +25,45 @@ int inputCzech() {
 	int choice;// = 0;
 
 	
-	while (true) {
-		getline(cin, input);
-		stringstream ss(input);
-		if (ss >> choice) {
-			if (choice > 0) {
-				if (atFirstMenu && choice < 4) {
-					ss.str("");
-					break;
-				}
-				if (atMainMenu && choice < 9) {
-					cout << "we made a menu choice" << endl;
-					ss.str("");
-					break;
-				}
-			}
-		}
+	// while (true) {
+	// 	getline(cin, input);
+	// 	stringstream ss(input);
+	// 	if (ss >> choice) {
+	// 		if (choice > 0) {
+	// 			if (atFirstMenu && choice < 4) {
+	// 				ss.str("");
+	// 				break;
+	// 			}
+	// 			if (atMainMenu && choice < 9) {
+	// 				cout << "we made a menu choice" << endl;
+	// 				ss.str("");
+	// 				break;
+	// 			}
+	// 		}
+	// 	}
 
-		cout << "Sorry, your input was not valid, please try again." << endl;
-	}
+	// 	cout << "Sorry, your input was not valid, please try again." << endl;
+	// }
 
-	cout << choice << endl;
-	// cin >> input;
+	// cout << choice << endl;
+	cin >> choice;
+	// while (true) {
+	// 	if (choice < 1 || > 10) {
+	// 		cin >> choice;
+	// 	}
+	// }
 	// cin.clear();
 	// cin.ignore(10000, '\n');  
 
- //    while ((cin.fail()) || (input < 1)) {
-	//     cin.clear();               
-	//     cin.ignore(10000, '\n');   
-	//     cout << "Sorry, your input was not valid, please try again." << endl;
-	//     cin >> input;
-	// }
+    while ((cin.fail()) || (choice < 1)) {
+    	cout << choice << endl;
+	    cin.clear();               
+	    cin.ignore(10000, '\n');   
+	    cout << "Sorry, your input was not valid, please try again." << endl;
+	    cin >> choice;
+	}
 
+	cin.ignore(10000, '\n');
 	return choice;
 }
 
@@ -79,10 +86,12 @@ int inputCzech() {
 void czechUsername(string user)
 {
 	bool userExists = false;
+	cout << userExists << endl;
 	FileManage manager;
 
 	// read file to see if username exists
 	userExists = manager.findUsername(user);
+	cout << userExists << endl;
 
 	if (userExists)
 	{
@@ -92,7 +101,7 @@ void czechUsername(string user)
 
 void czechPassword(string pass)
 {
-	bool correctLength = false;
+	//bool correctLength = false;
 	int length = pass.length();
 
 	if (length <= 6 || length >= 56)
@@ -158,7 +167,7 @@ void mainMenu(User* user) {
 	cout << "In order to ensure that your operations are saved, please remember to fully log out when you are finished!" << endl;
 	cout << "How can we help you today?" << endl;
 	int x; //= 0;
-	while (true) {
+	while (atMainMenu) {
 		cout <<
 		"\t\t=====================================\n \
 		Enter 1 to Check Balance\n  \
@@ -344,6 +353,7 @@ int main(void){
 					string password;
 					cout<<"Enter your username."<<endl;
 					getline(cin, username);
+					//cin.ignore(10000, '\n');
 					cout<<"Enter your password."<<endl;
 					getline(cin, password);
 
@@ -374,20 +384,23 @@ int main(void){
 			User* user;
 
 
-			while (true) {	
-				cout<<"Enter your name."<< endl;
-				getline(cin, name);
-				cout<<"Enter your desired username."<<endl;
-				getline(cin, username);
-				//cout << "you should have entered a username here" << endl;
-				cout<<"Please enter a password that is between 6 and 56 characters, exclusive." << endl;
-				getline(cin, password);
-				cout<<"Enter account type \n 1: Checking \n 2: Savings"<<endl;
-				accountType = inputCzech();
-				cout << "What would you like to call this account?" << endl;
-				getline(cin, accountName);
+			while (true) {
+				try {	
+					cout<<"Enter your name."<< endl;
+					getline(cin, name);
+					cout<<"Enter your desired username."<<endl;
+					getline(cin, username);
+					czechUsername(username);
+					//cout << "you should have entered a username here" << endl;
+					cout<<"Please enter a password that is between 6 and 56 characters, exclusive." << endl;
+					getline(cin, password);
+					czechPassword(password);
+					cout<<"Enter account type \n 1: Checking \n 2: Savings"<<endl;
+					accountType = inputCzech();
+					cout << "What would you like to call this account?" << endl;
+					getline(cin, accountName);
 
-				try{
+
 					user = czechUser(name, username, password, accountName);
 					cout << user->getRealName() << ", thank you for choosing PBS for all your personal banking needs." << endl;
 					break;
