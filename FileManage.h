@@ -71,6 +71,7 @@ public:
 		ifstream myFile;
 		string existingUser;
 		myFile.open("accInfo.txt");
+		bool exists = false;
 
 
 		//check to see file opened correctly
@@ -84,14 +85,12 @@ public:
 
 			if (existingUser == username) {
 
-				return true;
-			} else {
-
-				return false;
+				exists = true;
 			}			
 		}
 
 		myFile.close();
+		return exists;
 	}
 
 	//check whether a certain user has an existing account with the name given
@@ -153,7 +152,6 @@ public:
 		}
 		
 		freeAccounts = count/2;
-		cout << "You have " << freeAccounts << " account(s) free." << endl;
 
 		return freeAccounts;
 		myFile.close();
@@ -171,7 +169,6 @@ public:
 	//read in from accInfo and export to temp file
 	void writeToTemp(string username) {
 		//to read in file
-		FileManage manager;
 		string line;
 		string skip;
 		
