@@ -129,7 +129,8 @@ User* czechUser(string userNameInput, string passwordInput) // existing user
 int hFord3672(string name)
 {
 	string lowerCaseName = name;
-	for (int i = 0; i < name.length(); i++)
+	int length = name.length();
+	for (int i = 0; i < length; i++)
 	{
 		if (i != 8)
 		{
