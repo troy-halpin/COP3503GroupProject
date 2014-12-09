@@ -131,7 +131,7 @@ void mainMenu(User* user) {
 	atMainMenu = true;
 	Account* currAccount = user->grabAccount();
 
-	cout << "In order to ensure that your operations are saved, please remember to fully log out when you are finished!" << endl;
+	cout << "In order to ensure that your operations are saved, please remember to fully log out when you are finished!\n" << endl;
 	cout << "How can we help you today?" << endl;
 	int x; //= 0;
 	while (atMainMenu) {
@@ -383,7 +383,7 @@ int main(void){
 
 
 					user = czechUser(name, username, password, accountName);
-					cout << user->getRealName() << ", thank you for choosing PBS for all your personal banking needs." << endl;
+					cout << user->getRealName() << ", thank you for choosing PBS for all your personal banking needs.\n" << endl;
 
 					break;
 
@@ -394,7 +394,6 @@ int main(void){
 			}
 			
 			mainMenu(user);
-			//x = 3;
 		}
 		
 		else if (x == 3) {
@@ -403,7 +402,7 @@ int main(void){
 				
 				break;
 			} else {
-				
+
 				break;
 			}
 		}
