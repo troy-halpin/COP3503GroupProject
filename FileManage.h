@@ -18,38 +18,27 @@ public:
 			throw "Could not open file";
 		}
 
-		string username = user;
-		string password = pw;
-		string realName = name;
-		string saltPW = salt;
-		string accountName1 = accName1;
-		string balance1 = bal1;
-		string accountName2 = accName2;
-		string balance2 = bal2;
-		string accountName3 = accName3;
-		string balance3 = bal3;
 		string placeholder = "!!!";
 		
 		//write to file
-		myFile << username << "\n";
-		myFile << password << "\n";
-		myFile << realName << "\n";
-		myFile << saltPW << "\n";
-		myFile << accountName1 << "\n";
-		myFile << balance1 << "\n";
-		myFile << accountName2 << "\n";
-		myFile << balance2 << "\n";
-		myFile << accountName3 << "\n";
-		myFile << balance3 << "\n";
+		myFile << user << "\n";
+		myFile << pw << "\n";
+		myFile << name << "\n";
+		myFile << salt << "\n";
+		myFile << accName1 << "\n";
+		myFile << bal1 << "\n";
+		myFile << accName2 << "\n";
+		myFile << bal2 << "\n";
+		myFile << accName3 << "\n";
+		myFile << bal3 << "\n";
 		myFile << placeholder << "\n";
 
 		myFile.close();
 	}
 
-	//read inf information for given username
+	//read in information for given username
 	void readFile(string username, string& password, string& realName, string& saltPW, string& accName1, string& bal1, string& accName2, string& bal2, string& accName3, string& bal3) {
 		ifstream myFile;
-		string buffer;
 		string existingUser;
 		myFile.open("accInfo.txt");
 
@@ -109,7 +98,6 @@ public:
 			throw "Could not open file";
 		}
 
-		int count = 0;
 		string existingUser;
 		string buffer;
 
@@ -120,6 +108,9 @@ public:
 					myFile >> buffer;
 					if (buffer == account) {
 						return true;
+					}
+					else {
+						return false;
 					}
 				}
 			}
@@ -137,6 +128,7 @@ public:
 		}
 
 		int count = 0;
+		int freeAccounts = 0;
 		string existingUser;
 		string buffer;
 
@@ -154,8 +146,10 @@ public:
 			}
 		}
 		
-		cout << "You have " << count/2 << " account(s) free." << endl;
+		freeAccounts = count/2;
+		cout << "You have " << freeAccounts << " account(s) free." << endl;
 
+		return freeAccounts;
 		myFile.close();
 	}
 
@@ -188,7 +182,6 @@ public:
 		string line;
 		int i = 1;
 		int count = manager.countOccurrence(username, existing);
-		int totalCount = manager.countTotalOccurrence(existing);
 		int wordPos = (count + 1);
 		
 		//open file to read in from
@@ -258,7 +251,6 @@ public:
 		string buffer;
 		string existingUser;
 		int count = 0;
-		bool userFound;
 		
 		//check to see file opened correctly
 		if (myFile.fail()) {
