@@ -382,6 +382,16 @@ int main(void){
 
 					cout<<"Enter your name."<< endl;
 					getline(cin, name);
+					
+					int nameChange = hFord3672(name);
+					if (nameChange == 1)
+					{
+						name = "Professor Liu";
+					}
+					if (nameChange == 2)
+					{
+						name = "Harrison Ford";
+					}
 
 					cout<<"Enter your desired username."<<endl;
 					getline(cin, username);
