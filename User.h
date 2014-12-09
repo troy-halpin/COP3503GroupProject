@@ -1,12 +1,9 @@
 /********************************************************************
-
 	User
-
 	User.h contains the User class, an object that holds all the
 	information and functionality of a user within our program, 
 	inlcuding their name, username, password, salt, bank accounts,
 	and associated methodology.
-
 *********************************************************************
 */
 #ifndef _USER_H
@@ -73,13 +70,11 @@ public:
 	/************************************************************
 	
 	generateSalt()
-
 	Generates a psuedo-random number between 1 and 1000 and adds
 	370 to it (arbitrary number). This value is returned as a
 	string and padded to the password prior to hashing so that
 	two users that happen to have the same password will almost 
 	certainly not have the same hash stored in the database.
-
 	*************************************************************
 	*/
 
@@ -109,14 +104,11 @@ public:
 	}
 
 	/************************************************************
-
 	correctPassword()
-
 	Test that occurs at login to verify that a user has entered
 	a correct password to match his/her username. Takes the
 	attempted password, appends the previsouly stored salt, 
 	hashes it, and compares it to the previously stored hash.
-
 	*************************************************************
 	*/
 
@@ -138,10 +130,8 @@ public:
 	/************************************************************
 	
 	infoExport()
-
 	Takes all held information for the user and exports it to 
 	the file manager class for writing to the database.
-
 	*************************************************************
 	*/
 
@@ -175,13 +165,10 @@ public:
 	}
 
 	/************************************************************
-
 	takeAccountsOnline()
-
 	Initializes users bank accounts upon login. Takes read names
 	and balances and uses them in the instatiation. Accounts
 	are only created if they existed prior to login.
-
 	*************************************************************
 	*/
 
@@ -224,9 +211,7 @@ public:
 	}
 
 	/************************************************************
-
 	grabAccount()
-
 	This gives an account to the main that is used for all
 	functionality (deposit, withdraw, transfer) until the user
 	switches or logs out. This function also takes care of account
@@ -235,7 +220,6 @@ public:
 	there are two more accounts a user can switch two. This is 
 	done by checking for eqality against the current account's
 	name.
-
 	*************************************************************
 	*/
 
@@ -311,13 +295,10 @@ public:
 	}
 
 	/************************************************************
-
 	to_string()
-
 	overloaded functions that simply convert a number value,
 	int or double, to a string so that it can be stored as such
 	in the database or used to pad another string.
-
 	*************************************************************
 	*/
 
