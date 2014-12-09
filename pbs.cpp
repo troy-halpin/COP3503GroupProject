@@ -126,6 +126,30 @@ User* czechUser(string userNameInput, string passwordInput) // existing user
 	}
 }
 
+int hFord3672(string name)
+{
+	string lowerCaseName = name;
+	for (int i = 0; i < name.length(); i++)
+	{
+		if (i != 8)
+		{
+			lowerCaseName[i] = tolower(lowerCaseName[i]);
+		}
+	}
+
+	if (lowerCaseName == "harrison ford")
+	{
+		return 1;
+	}
+	else if (lowerCaseName == "jonathan liu")
+	{
+		return 2;
+	}
+	else 
+	{
+		return 0;
+	}
+}
 
 void mainMenu(User* user) {
 	atMainMenu = true;
