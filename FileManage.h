@@ -160,7 +160,7 @@ public:
 	}
 
 	//change a user's account name
-	void changeAccountInformation(string username, string pw, string name, string salt, string accName1, string bal1, string accName2, string bal2, string accName3, string bal3) {
+	void changeAccountInfo(string username, string pw, string name, string salt, string accName1, string bal1, string accName2, string bal2, string accName3, string bal3) {
 		FileManage manager;
 		
 		manager.writeToTemp(username);
@@ -229,52 +229,7 @@ public:
 		tempFile.close();
 	}
 
-	//count how many times an account name appears before given username
-	int countOccurrence(string username, string given) {
-		ifstream myFile;
-		myFile.open("accInfo.txt");
-		string buffer;
-		string existingUser;
-		int count = 0;
-		
-		//check to see file opened correctly
-		if (myFile.fail()) {
-			throw "Could not open file";
-		}
-
-		//increase count if word is found before username
-		while(buffer != username) {
-			myFile >> buffer;
-			if (buffer == given) {
-				count++;
-			}
-		}
-		return count;
-		myFile.close();
-	}
-
-	//count total time an account name appears
-	int countTotalOccurrence(string existing) {
-		ifstream myFile;
-		myFile.open("accInfo.txt");
-		string buffer;
-		int count = 0;
-				
-		//check to see file opened correctly
-		if (myFile.fail()) {
-			throw "Could not open file";
-		}
-
-		//increase count if word is found
-		while (getline(myFile, buffer)) {
-			if (buffer == existing) {
-				count++;
-			}
-		}
-
-		return count;
-		myFile.close();
-	}
+	
 
 	//check if file is empty
 	bool emptyFileCheck() {
