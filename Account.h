@@ -1,3 +1,5 @@
+#ifndef _ACCOUNT_H
+#define _ACCOUNT_H
 #include <iostream>
 #include <string.h>
 
@@ -5,79 +7,48 @@ using namespace std;
 
 class Account{
 
-public:
 	string accountName;
-	int accountType;
-	float balance;
+	double balance;
 
-	Account(string name, float bal, int type);
+public:
 
-	float getAccountBalance();
-	void setAccountBalance(float amt);
-	string getAccountName();
-	void setAccountName(string name);
-	void withdraw(float amt);
-	void deposit(float amt);
-	void transfer(float amt, Account to);
-	int getAccountType();
+	Account(string name, double bal) {
 
-
-
-};
-	Account::Account(string name, float bal, int type){
 		accountName = name;
 		balance = bal;
-		accountType = type;
 	}
 
-	string Account::getAccountName(){
+	string getAccountName() {
 		return accountName;
 	}
-	void Account::setAccountName(string name){
+	void setAccountName(string name) {
 		accountName = name;
 	}
 
-	int Account::getAccountType(){
-		return accountType;
-	}
-
-	void Account::setAccountBalance(float amt){
+	void setAccountBalance(double amt) {
 		balance = amt;
 	}
-	float Account::getAccountBalance(){
+	double getAccountBalance() {
 		return balance;
 	}
 
-	void Account::withdraw(float amt){
+	void withdraw(double amt) {
 
 		if(amt > balance){
 			cout<<"Error: You do not have enough in your account to withdraw that amount."<<endl;
 		}
 		else{
 			balance -= amt;
-			cout<<"Successfully withdrawn: "<<amt<<"\n"<<accountName<<" Balance: "<<balance<<endl;
+			cout << "Successfully withdrawn: " << amt << " USD\n" << accountName << " Balance: " << balance << endl;
 		}
 
 	}
 
-	void Account::deposit(float amt){ 
+	void deposit(double amt) { 
 
 		balance += amt;
-		cout<<"Successfully deposited: "<<amt<<"\n"<<accountName<<" Balance: "<<balance<<endl;
+		cout << "Successfully deposited: " << amt << " USD\n" << accountName << " Balance: " << balance << endl;
 
 	}
-
-	void Account::transfer(float amt, Account to){
-	
-		if(amt > balance){
-			cout<<"Error: You do not have enough in your account to transfer that amount."<<endl;
-		}
-		else{
-			balance -= amt;
-			to.setAccountBalance(to.getAccountBalance()+amt);
-			cout<<"Successfully transferred: "<<amt<<" from "<<accountName<<" to "<<to.getAccountName()<<endl;
-			cout<<accountName<<": "<<balance<<endl;
-			cout<<to.getAccountName()<<": "<<to.getAccountBalance()<<endl;
-		}
-	}
-
+};
+# endif
